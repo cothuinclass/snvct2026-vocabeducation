@@ -1,0 +1,1 @@
+# snvct2026-vocabeducation
