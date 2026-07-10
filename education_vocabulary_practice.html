@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Interactive B1 Education Vocabulary practice for VSTEP learners." />
+  <title>Topic 1: Education Vocabulary Practice</title>
+  <style>
+    :root {
+      --ink: #25304a;
+      --muted: #667085;
+      --paper: #fffdfd;
+      --panel: #ffffff;
+      --pink: #ef769f;
+      --pink-dark: #c84372;
+      --pink-soft: #fde8f0;
+      --lavender: #9b8bd8;
+      --lavender-soft: #eeeafd;
+      --mint: #dff6ee;
+      --green: #15805f;
+      --red: #c73d52;
+      --red-soft: #ffe7eb;
+      --yellow: #fff3c4;
+      --border: #e7dfea;
+      --shadow: 0 16px 45px rgba(91, 67, 105, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(239,118,159,.12), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(155,139,216,.14), transparent 30%),
+        #fbf9fc;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      line-height: 1.65;
+    }
+
+    button, input, textarea { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 24px auto 60px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(231,223,234,.9);
+      border-radius: 28px;
+      background: linear-gradient(135deg, #fff, #fff6fa 54%, #f3efff);
+      box-shadow: var(--shadow);
+      padding: clamp(26px, 4vw, 52px);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      right: -70px;
+      top: -95px;
+      border-radius: 50%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(239,118,159,.12) 0 9px,
+        rgba(155,139,216,.10) 9px 18px
+      );
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: var(--pink-soft);
+      color: var(--pink-dark);
+      font-size: .86rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { line-height: 1.2; }
+
+    h1 {
+      max-width: 780px;
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -.045em;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 26px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(10px);
+    }
+
+    .progress-track {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #eee9f1;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--pink), var(--lavender));
+      transition: width .25s ease;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: .93rem;
+      font-weight: 700;
+    }
+
+    .score-badge {
+      min-width: 112px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      text-align: center;
+      background: var(--lavender-soft);
+    }
+
+    .score-badge strong {
+      display: block;
+      font-size: 1.4rem;
+      color: #5c49a1;
+    }
+
+    .score-badge span {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 8px;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 22px 0;
+      padding: 10px;
+      border: 1px solid rgba(231,223,234,.95);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 10px 28px rgba(91,67,105,.10);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-btn {
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #4f4662;
+      background: transparent;
+      font-weight: 800;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--pink), var(--lavender));
+    }
+
+    .section-card {
+      margin-top: 24px;
+      padding: clamp(20px, 3vw, 34px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 12px 34px rgba(91,67,105,.08);
+      scroll-margin-top: 100px;
+    }
+
+    .section-head {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-kicker {
+      margin: 0 0 4px;
+      color: var(--pink-dark);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .section-card h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); }
+
+    .instruction {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .mini-score {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #5d4aa2;
+      background: var(--lavender-soft);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .question {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fff;
+      transition: border-color .2s ease, background .2s ease, transform .2s ease;
+    }
+
+    .question:hover { transform: translateY(-1px); }
+
+    .question.correct {
+      border-color: #8fd5be;
+      background: #f3fcf8;
+    }
+
+    .question.incorrect {
+      border-color: #f1a2b0;
+      background: #fff7f8;
+    }
+
+    .q-title {
+      margin: 0 0 12px;
+      font-weight: 750;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .option {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .option:has(input:checked) {
+      border-color: var(--lavender);
+      background: var(--lavender-soft);
+    }
+
+    input[type="radio"] { accent-color: var(--pink-dark); }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 20px;
+      padding: 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--pink-soft), var(--lavender-soft));
+    }
+
+    .word-chip {
+      border: 1px solid rgba(155,139,216,.28);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #4c4162;
+      background: rgba(255,255,255,.86);
+      font-weight: 750;
+    }
+
+    .word-chip:hover {
+      color: #fff;
+      background: var(--lavender);
+    }
+
+    .passage {
+      padding: clamp(18px, 3vw, 30px);
+      border-left: 5px solid var(--pink);
+      border-radius: 0 18px 18px 0;
+      background: #fffafb;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.03rem;
+    }
+
+    .passage p { margin: 0 0 1em; }
+    .passage p:last-child { margin-bottom: 0; }
+
+    .gap-input {
+      width: min(190px, 100%);
+      margin: 0 4px;
+      padding: 5px 9px;
+      border: 0;
+      border-bottom: 2px solid #b9acc4;
+      border-radius: 8px 8px 3px 3px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+      font-family: inherit;
+      font-weight: 750;
+      transition: .2s ease;
+    }
+
+    .gap-input:focus {
+      border-bottom-color: var(--pink-dark);
+      box-shadow: 0 4px 0 rgba(239,118,159,.12);
+    }
+
+    .gap-input.correct {
+      border-bottom-color: var(--green);
+      background: var(--mint);
+    }
+
+    .gap-input.incorrect {
+      border-bottom-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .answer-note {
+      display: none;
+      margin-top: 7px;
+      color: var(--red);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: .88rem;
+      font-weight: 800;
+    }
+
+    .answer-note.show { display: block; }
+
+    .prompt-box {
+      margin: 18px 0;
+      padding: 20px;
+      border: 1px solid #f0c8d7;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff9fb, #f7f3ff);
+    }
+
+    .prompt-box h3 { margin-top: 0; }
+
+    .idea-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 18px 0 24px;
+    }
+
+    .idea {
+      display: grid;
+      min-height: 88px;
+      place-items: center;
+      padding: 14px;
+      border: 2px solid #f0a0bb;
+      border-radius: 18px;
+      text-align: center;
+      background: #fff;
+      font-weight: 800;
+    }
+
+    .idea.center {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--pink), var(--lavender));
+    }
+
+    .subsection {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px dashed #d9cfe0;
+    }
+
+    .subsection h3 { margin-bottom: 6px; }
+
+    .writing-area {
+      width: 100%;
+      min-height: 230px;
+      padding: 16px;
+      resize: vertical;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      color: var(--ink);
+      background: #fff;
+      outline: none;
+    }
+
+    .writing-area:focus {
+      border-color: var(--lavender);
+      box-shadow: 0 0 0 4px rgba(155,139,216,.12);
+    }
+
+    .writing-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .word-count.good { color: var(--green); font-weight: 850; }
+    .word-count.short { color: var(--red); font-weight: 850; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 13px;
+      padding: 11px 16px;
+      font-weight: 850;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--pink-dark), var(--lavender));
+      box-shadow: 0 8px 18px rgba(200,67,114,.18);
+    }
+
+    .btn-secondary {
+      color: #51465d;
+      background: #f2edf4;
+    }
+
+    .btn-ghost {
+      color: var(--pink-dark);
+      border: 1px solid #f1bfd0;
+      background: #fff;
+    }
+
+    .btn:hover { filter: brightness(.98); transform: translateY(-1px); }
+
+    .feedback {
+      display: none;
+      margin-top: 16px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      font-weight: 800;
+    }
+
+    .feedback.show { display: block; }
+    .feedback.success { color: #0e6c50; background: var(--mint); }
+    .feedback.warn { color: #914056; background: var(--red-soft); }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 50;
+      max-width: 320px;
+      padding: 13px 16px;
+      border-radius: 14px;
+      color: #fff;
+      background: #3d3348;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      margin-top: 26px;
+      padding: 22px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      .dashboard { grid-template-columns: 1fr; }
+      .score-badge { width: 100%; }
+      .section-head { flex-direction: column; }
+      .idea-map { grid-template-columns: 1fr; }
+      .idea.center { order: -1; }
+      .passage { padding: 16px; font-size: .98rem; }
+      .gap-input { width: 150px; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .toolbar, .actions, .dashboard, .toast { display: none !important; }
+      .section-card { box-shadow: none; break-inside: avoid; }
+      .app-shell { width: 100%; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <span class="eyebrow">Ready for VSTEP · B1</span>
+      <h1>Topic 1: Education Vocabulary</h1>
+      <p class="lead">
+        Practise key education vocabulary through multiple-choice questions,
+        contextual gap fills, VSTEP speaking models, and a writing task.
+      </p>
+
+      <div class="dashboard" aria-label="Practice progress">
+        <div>
+          <div class="progress-label">
+            <span>Overall completion</span>
+            <span id="progressText">0 of 60 answered</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="score-badge">
+          <strong id="overallScore">– / 60</strong>
+          <span>Current score</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="toolbar" aria-label="Page sections">
+      <button class="nav-btn active" data-target="section-a">A. Choose</button>
+      <button class="nav-btn" data-target="section-b">B. University Life</button>
+      <button class="nav-btn" data-target="section-c">C. Speaking Part 2</button>
+      <button class="nav-btn" data-target="section-d">D. Speaking Part 3</button>
+      <button class="nav-btn" data-target="section-e">E. Writing Task 1</button>
+    </nav>
+
+    <main>
+      <!-- SECTION A -->
+      <section class="section-card" id="section-a" data-section="A">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Section A</p>
+            <h2>Choose the correct answer</h2>
+            <p class="instruction">Select the word or phrase that best completes each sentence.</p>
+          </div>
+          <div class="mini-score" id="score-A">0 / 10</div>
+        </div>
+
+        <div class="question-list">
+          <div class="question" data-question="a1">
+            <p class="q-title">1. After graduating, he received a teaching ________ from the university.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a1" value="certificate" data-answer="certificate"> certificate</label>
+              <label class="option"><input type="radio" name="a1" value="scholarship"> scholarship</label>
+            </div>
+          </div>
+          <div class="question" data-question="a2">
+            <p class="q-title">2. Education is ________ until the age of 15 in many countries.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a2" value="compulsory" data-answer="compulsory"> compulsory</label>
+              <label class="option"><input type="radio" name="a2" value="qualified"> qualified</label>
+            </div>
+          </div>
+          <div class="question" data-question="a3">
+            <p class="q-title">3. We have to ________ our homework before the next class.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a3" value="attend"> attend</label>
+              <label class="option"><input type="radio" name="a3" value="hand in" data-answer="hand in"> hand in</label>
+            </div>
+          </div>
+          <div class="question" data-question="a4">
+            <p class="q-title">4. She didn’t do well in the first semester, but now she’s making good ________.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a4" value="progress" data-answer="progress"> progress</label>
+              <label class="option"><input type="radio" name="a4" value="discipline"> discipline</label>
+            </div>
+          </div>
+          <div class="question" data-question="a5">
+            <p class="q-title">5. I’m going to ________ an English exam next week.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a5" value="take" data-answer="take"> take</label>
+              <label class="option"><input type="radio" name="a5" value="pass"> pass</label>
+            </div>
+          </div>
+          <div class="question" data-question="a6">
+            <p class="q-title">6. He decided to ________ in a French course for beginners.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a6" value="enroll" data-answer="enroll|enrol"> enroll</label>
+              <label class="option"><input type="radio" name="a6" value="dropout"> dropout</label>
+            </div>
+          </div>
+          <div class="question" data-question="a7">
+            <p class="q-title">7. Students must ________ all classes to pass the course.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a7" value="attend" data-answer="attend"> attend</label>
+              <label class="option"><input type="radio" name="a7" value="participate"> participate</label>
+            </div>
+          </div>
+          <div class="question" data-question="a8">
+            <p class="q-title">8. After failing the exam, he realized he needed to ________ harder.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a8" value="study" data-answer="study"> study</label>
+              <label class="option"><input type="radio" name="a8" value="get a degree"> get a degree</label>
+            </div>
+          </div>
+          <div class="question" data-question="a9">
+            <p class="q-title">9. Many students hope to get a ________ to study abroad.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a9" value="certificate"> certificate</label>
+              <label class="option"><input type="radio" name="a9" value="scholarship" data-answer="scholarship"> scholarship</label>
+            </div>
+          </div>
+          <div class="question" data-question="a10">
+            <p class="q-title">10. He always does well in tests, especially in ________.</p>
+            <div class="options">
+              <label class="option"><input type="radio" name="a10" value="lectures"> lectures</label>
+              <label class="option"><input type="radio" name="a10" value="math" data-answer="math|maths"> math</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary check-section" data-section-key="A">Check Section A</button>
+          <button class="btn btn-secondary reset-section" data-section-key="A">Reset</button>
+        </div>
+        <div class="feedback" id="feedback-A"></div>
+      </section>
+
+      <!-- SECTION B -->
+      <section class="section-card" id="section-b" data-section="B">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Section B</p>
+            <h2>Complete the university-life passage</h2>
+            <p class="instruction">Use each word in the bank once. Click a word, then click or focus a gap to insert it.</p>
+          </div>
+          <div class="mini-score" id="score-B">0 / 10</div>
+        </div>
+
+        <div class="exercise-group" data-group="B">
+          <div class="word-bank">
+            <button class="word-chip">internship</button>
+            <button class="word-chip">concentrate</button>
+            <button class="word-chip">collaborate</button>
+            <button class="word-chip">plagiarism</button>
+            <button class="word-chip">tutorial</button>
+            <button class="word-chip">acquire</button>
+            <button class="word-chip">comprehension</button>
+            <button class="word-chip">prestigious</button>
+            <button class="word-chip">cognitive</button>
+            <button class="word-chip">accreditation</button>
+          </div>
+
+          <div class="passage">
+            <p>
+              Last year, I was accepted into a very
+              <input class="gap-input" data-section-key="B" data-answer="prestigious" aria-label="Section B gap 1">
+              university in Singapore. I was excited but also a bit nervous because I knew the program would be demanding.
+            </p>
+            <p>
+              On the first day, we had a
+              <input class="gap-input" data-section-key="B" data-answer="tutorial" aria-label="Section B gap 2">
+              to meet our academic advisor and learn about how the course would work. Classes were challenging,
+              especially the reading texts. At first, I struggled with
+              <input class="gap-input" data-section-key="B" data-answer="comprehension" aria-label="Section B gap 3">,
+              so I spent extra time reviewing the materials and asking questions.
+            </p>
+            <p>
+              To succeed, I had to learn how to
+              <input class="gap-input" data-section-key="B" data-answer="acquire" aria-label="Section B gap 4">
+              important skills like note-taking, critical thinking, and time management. It wasn’t easy to
+              <input class="gap-input" data-section-key="B" data-answer="concentrate" aria-label="Section B gap 5">
+              when there were so many distractions in the dormitory, but I did my best.
+            </p>
+            <p>
+              One thing I liked was that students often worked in groups and learned to
+              <input class="gap-input" data-section-key="B" data-answer="collaborate" aria-label="Section B gap 6">
+              with each other on presentations and projects. However, our professors reminded us many times about
+              <input class="gap-input" data-section-key="B" data-answer="plagiarism" aria-label="Section B gap 7">
+              and how serious it was. Everyone had to submit original work.
+            </p>
+            <p>
+              As part of the course, I also completed an
+              <input class="gap-input" data-section-key="B" data-answer="internship" aria-label="Section B gap 8">
+              at a local media company. It gave me hands-on experience and helped me see how my major could be applied in the real world.
+            </p>
+            <p>
+              My university is known for its strong programs and international
+              <input class="gap-input" data-section-key="B" data-answer="accreditation" aria-label="Section B gap 9">,
+              so I feel proud to be here. Although it’s difficult, the classes really help improve my
+              <input class="gap-input" data-section-key="B" data-answer="cognitive" aria-label="Section B gap 10">
+              skills.
+            </p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary check-section" data-section-key="B">Check Section B</button>
+          <button class="btn btn-ghost reveal-section" data-section-key="B">Reveal Answers</button>
+          <button class="btn btn-secondary reset-section" data-section-key="B">Reset</button>
+        </div>
+        <div class="feedback" id="feedback-B"></div>
+      </section>
+
+      <!-- SECTION C -->
+      <section class="section-card" id="section-c" data-section="C">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Section C · VSTEP Speaking Part 2</p>
+            <h2>Preparing for a job application</h2>
+            <p class="instruction">Complete the model response with the words in the box.</p>
+          </div>
+          <div class="mini-score" id="score-C">0 / 10</div>
+        </div>
+
+        <div class="prompt-box">
+          <h3>Speaking prompt</h3>
+          <p>
+            You are a senior student at a university and want to prepare for your job application after graduation.
+            What do you want to do first: <strong>(a)</strong> improve your English skills,
+            <strong>(b)</strong> work as an intern, or <strong>(c)</strong> sharpen your soft skills?
+          </p>
+        </div>
+
+        <div class="exercise-group" data-group="C">
+          <div class="word-bank">
+            <button class="word-chip">internship</button>
+            <button class="word-chip">certificate</button>
+            <button class="word-chip">lectures</button>
+            <button class="word-chip">curriculum</button>
+            <button class="word-chip">skills</button>
+            <button class="word-chip">job market</button>
+            <button class="word-chip">acquire</button>
+            <button class="word-chip">participate</button>
+            <button class="word-chip">soft skills</button>
+            <button class="word-chip">degree</button>
+          </div>
+
+          <div class="passage">
+            <p>
+              Personally, I believe applying for an
+              <input class="gap-input" data-section-key="C" data-answer="internship" aria-label="Section C gap 1">
+              is the most effective way to get ready for real work life. As a senior student, I want to develop both
+              technical knowledge and professional
+              <input class="gap-input" data-section-key="C" data-answer="skills" aria-label="Section C gap 2">
+              through real situations, not just classroom theory. This will help me become more confident and competitive in the
+              <input class="gap-input" data-section-key="C" data-answer="job market" aria-label="Section C gap 3">.
+            </p>
+            <p>
+              One key benefit of doing an internship is that it allows me to apply what I’ve learned in the classroom to actual work situations.
+              At university, most of the
+              <input class="gap-input" data-section-key="C" data-answer="curriculum" aria-label="Section C gap 4">
+              focuses on theory and
+              <input class="gap-input" data-section-key="C" data-answer="lectures" aria-label="Section C gap 5">,
+              so an internship is a chance for me to work in teams, solve problems, and understand how companies operate.
+              This helps me
+              <input class="gap-input" data-section-key="C" data-answer="acquire" aria-label="Section C gap 6">
+              new skills and improve my professional behaviour.
+            </p>
+            <p>
+              Some students prefer to focus on English or communication training first, but I believe these can also improve naturally during real-life experience.
+              For example, writing reports and attending meetings will help with English, while teamwork helps me practise
+              <input class="gap-input" data-section-key="C" data-answer="soft skills" aria-label="Section C gap 7">
+              such as time management and collaboration. I can also choose to
+              <input class="gap-input" data-section-key="C" data-answer="participate" aria-label="Section C gap 8">
+              in workshops or job fairs while doing my internship to continue growing.
+            </p>
+            <p>
+              All things considered, doing an internship gives me both the experience and confidence I need to succeed after receiving my
+              <input class="gap-input" data-section-key="C" data-answer="degree" aria-label="Section C gap 9">,
+              along with any language or professional
+              <input class="gap-input" data-section-key="C" data-answer="certificate|certificates" aria-label="Section C gap 10">
+              I earn along the way.
+            </p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary check-section" data-section-key="C">Check Section C</button>
+          <button class="btn btn-ghost reveal-section" data-section-key="C">Reveal Answers</button>
+          <button class="btn btn-secondary reset-section" data-section-key="C">Reset</button>
+        </div>
+        <div class="feedback" id="feedback-C"></div>
+      </section>
+
+      <!-- SECTION D -->
+      <section class="section-card" id="section-d" data-section="D">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Section D · VSTEP Speaking Part 3</p>
+            <h2>Students should learn at least one foreign language</h2>
+            <p class="instruction">Complete the sample answer and follow-up responses.</p>
+          </div>
+          <div class="mini-score" id="score-D">0 / 20</div>
+        </div>
+
+        <div class="idea-map" aria-label="Idea map">
+          <div class="idea">Expand cultural knowledge</div>
+          <div class="idea center">Learn a foreign language</div>
+          <div class="idea">Expand networks</div>
+          <div class="idea">Apply for jobs</div>
+          <div class="idea">Your own ideas</div>
+        </div>
+
+        <div class="exercise-group" data-group="D-main">
+          <div class="word-bank">
+            <button class="word-chip">make friends</button>
+            <button class="word-chip">acquire</button>
+            <button class="word-chip">cultural</button>
+            <button class="word-chip">curriculum</button>
+            <button class="word-chip">apply for jobs</button>
+            <button class="word-chip">certificate</button>
+            <button class="word-chip">participate</button>
+            <button class="word-chip">deal with</button>
+            <button class="word-chip">communicate</button>
+            <button class="word-chip">skills</button>
+          </div>
+
+          <div class="passage">
+            <p>
+              Learning a foreign language should be a part of the school
+              <input class="gap-input" data-section-key="D" data-answer="curriculum" aria-label="Section D main gap 1">
+              for its benefits to students. I strongly believe that learning at least one foreign language brings both academic and practical benefits for students.
+            </p>
+            <p>
+              First of all, it helps students
+              <input class="gap-input" data-section-key="D" data-answer="communicate" aria-label="Section D main gap 2">
+              with people from different countries. When they travel abroad or
+              <input class="gap-input" data-section-key="D" data-answer="participate" aria-label="Section D main gap 3">
+              in international programmes, they can talk, share ideas, and even
+              <input class="gap-input" data-section-key="D" data-answer="make friends" aria-label="Section D main gap 4">
+              with people who speak other languages. This helps improve their communication skills and build confidence in social situations.
+            </p>
+            <p>
+              Secondly, learning languages allows students to understand different values and traditions. In other words, it develops their
+              <input class="gap-input" data-section-key="D" data-answer="cultural" aria-label="Section D main gap 5">
+              awareness. For example, by learning French, students can explore French food, music, and lifestyle.
+            </p>
+            <p>
+              Another strong reason is related to future careers. Many employers prefer candidates who can speak more than one language.
+              Students who learn foreign languages can
+              <input class="gap-input" data-section-key="D" data-answer="apply for jobs" aria-label="Section D main gap 6">
+              more easily, especially in international companies. In some cases, they might also need to earn a language
+              <input class="gap-input" data-section-key="D" data-answer="certificate" aria-label="Section D main gap 7">
+              as part of the job requirement.
+            </p>
+            <p>
+              Finally, learning a new language teaches students how to
+              <input class="gap-input" data-section-key="D" data-answer="deal with" aria-label="Section D main gap 8">
+              challenges, such as unfamiliar grammar or pronunciation. This helps them
+              <input class="gap-input" data-section-key="D" data-answer="acquire" aria-label="Section D main gap 9">
+              new learning strategies and become more independent. They can also participate in language clubs or exchange programmes to improve their
+              <input class="gap-input" data-section-key="D" data-answer="skills" aria-label="Section D main gap 10">
+              in real contexts.
+            </p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>Follow-up Question 1</h3>
+          <p class="instruction"><strong>At what age should children start learning a foreign language, and why?</strong></p>
+          <div class="exercise-group" data-group="D-f1">
+            <div class="word-bank">
+              <button class="word-chip">cognitive</button>
+              <button class="word-chip">tutorial</button>
+              <button class="word-chip">lifelong learning</button>
+              <button class="word-chip">curriculum</button>
+              <button class="word-chip">mentor</button>
+            </div>
+            <div class="passage">
+              <p>
+                In my view, the earlier children start learning a foreign language, the better. Young learners often have stronger
+                <input class="gap-input" data-section-key="D" data-answer="cognitive" aria-label="Section D follow-up 1 gap 1">
+                ability, so they can learn pronunciation more naturally.
+              </p>
+              <p>
+                Many schools now include language classes in the official
+                <input class="gap-input" data-section-key="D" data-answer="curriculum" aria-label="Section D follow-up 1 gap 2">,
+                and some offer
+                <input class="gap-input" data-section-key="D" data-answer="tutorial" aria-label="Section D follow-up 1 gap 3">
+                sessions for small groups. Students can also receive support from a language
+                <input class="gap-input" data-section-key="D" data-answer="mentor" aria-label="Section D follow-up 1 gap 4">,
+                who helps guide their progress.
+              </p>
+              <p>
+                Starting early gives children more time to practise and helps them develop habits that support
+                <input class="gap-input" data-section-key="D" data-answer="lifelong learning" aria-label="Section D follow-up 1 gap 5">.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>Follow-up Question 2</h3>
+          <p class="instruction"><strong>Do schools or parents need to take more responsibility for helping children learn foreign languages?</strong></p>
+          <div class="exercise-group" data-group="D-f2">
+            <div class="word-bank">
+              <button class="word-chip">collaborate</button>
+              <button class="word-chip">fall behind</button>
+              <button class="word-chip">assessment</button>
+              <button class="word-chip">catch on</button>
+              <button class="word-chip">discipline</button>
+            </div>
+            <div class="passage">
+              <p>
+                Personally, I believe schools should take more responsibility because they have qualified teachers who know how to conduct proper
+                <input class="gap-input" data-section-key="D" data-answer="assessment" aria-label="Section D follow-up 2 gap 1">
+                and track students’ progress. Schools, with well-established rules, can also create a structured environment that promotes
+                <input class="gap-input" data-section-key="D" data-answer="discipline" aria-label="Section D follow-up 2 gap 2">,
+                which is essential for consistent language learning.
+              </p>
+              <p>
+                Moreover, students have more chances to
+                <input class="gap-input" data-section-key="D" data-answer="collaborate" aria-label="Section D follow-up 2 gap 3">
+                with their classmates, which helps them practise speaking naturally. If learning is left entirely to parents, some students may
+                <input class="gap-input" data-section-key="D" data-answer="fall behind" aria-label="Section D follow-up 2 gap 4">,
+                especially if their families don’t speak foreign languages at home. In a good school setting, students can gradually
+                <input class="gap-input" data-section-key="D" data-answer="catch on" aria-label="Section D follow-up 2 gap 5">
+                and improve through daily exposure and practise.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary check-section" data-section-key="D">Check Section D</button>
+          <button class="btn btn-ghost reveal-section" data-section-key="D">Reveal Answers</button>
+          <button class="btn btn-secondary reset-section" data-section-key="D">Reset</button>
+        </div>
+        <div class="feedback" id="feedback-D"></div>
+      </section>
+
+      <!-- SECTION E -->
+      <section class="section-card" id="section-e" data-section="E">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Section E · VSTEP Writing Task 1</p>
+            <h2>Write an informal letter</h2>
+            <p class="instruction">Complete the sample letter, then draft your own response of at least 120 words.</p>
+          </div>
+          <div class="mini-score" id="score-E">0 / 10</div>
+        </div>
+
+        <div class="prompt-box">
+          <h3>Anna’s letter</h3>
+          <p><em>
+            I’m seriously thinking about applying to your university, but I don’t know much about it apart from what’s on the website.
+          </em></p>
+          <p><em>
+            Since you’re already studying there, could you tell me what it’s really like? I’d love to know about the courses in general,
+            as well as the difficulties students may encounter. Any advice from your personal experience?
+          </em></p>
+          <p><strong>Write at least 120 words. You do not need to write any addresses.</strong></p>
+        </div>
+
+        <div class="exercise-group" data-group="E">
+          <div class="word-bank">
+            <button class="word-chip">bear in mind</button>
+            <button class="word-chip">compulsory</button>
+            <button class="word-chip">hand in</button>
+            <button class="word-chip">take an exam</button>
+            <button class="word-chip">keep up with</button>
+            <button class="word-chip">think over</button>
+            <button class="word-chip">intellectual</button>
+            <button class="word-chip">set out</button>
+            <button class="word-chip">teach somebody a lesson</button>
+            <button class="word-chip">have no idea</button>
+          </div>
+
+          <div class="passage">
+            <p>Hi Anna,</p>
+            <p>
+              I’m so happy you’re thinking about studying here! Since I’ve been at this university for two years now,
+              I can give you a pretty honest review.
+            </p>
+            <p>
+              First, some courses are
+              <input class="gap-input" data-section-key="E" data-answer="compulsory" aria-label="Section E gap 1">,
+              like academic writing or research methods, so you can’t avoid them. But don’t worry! They’re really useful in the long run.
+              Assignments are usually fair, and we’re expected to
+              <input class="gap-input" data-section-key="E" data-answer="hand in" aria-label="Section E gap 2">
+              all our work on time. At the end of each semester, we always
+              <input class="gap-input" data-section-key="E" data-answer="take an exam" aria-label="Section E gap 3">,
+              but if you study regularly, you’ll be fine.
+            </p>
+            <p>
+              Some students find it hard to
+              <input class="gap-input" data-section-key="E" data-answer="keep up with" aria-label="Section E gap 4">
+              all the reading, especially in theory-heavy subjects. But the teachers are supportive and always
+              <input class="gap-input" data-section-key="E" data-answer="set out" aria-label="Section E gap 5">
+              the requirements clearly. I suggest you really
+              <input class="gap-input" data-section-key="E" data-answer="think over" aria-label="Section E gap 6">
+              your course choices, especially if you prefer more
+              <input class="gap-input" data-section-key="E" data-answer="intellectual" aria-label="Section E gap 7">
+              subjects like education or psychology.
+            </p>
+            <p>
+              Finally,
+              <input class="gap-input" data-section-key="E" data-answer="bear in mind" aria-label="Section E gap 8">
+              that the first semester can be tough. It definitely
+              <input class="gap-input" data-section-key="E" data-answer="taught me a lesson|teaches you a lesson|taught me an important lesson" aria-label="Section E gap 9">
+              about time management! In fact, I
+              <input class="gap-input" data-section-key="E" data-answer="had no idea|have no idea" aria-label="Section E gap 10">
+              how challenging university life could be at first, but things got better with time.
+            </p>
+            <p>Hope this helps! Feel free to ask if you want more details.</p>
+            <p>Take care,</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary check-section" data-section-key="E">Check Section E</button>
+          <button class="btn btn-ghost reveal-section" data-section-key="E">Reveal Answers</button>
+          <button class="btn btn-secondary reset-section" data-section-key="E">Reset</button>
+        </div>
+        <div class="feedback" id="feedback-E"></div>
+
+        <div class="subsection">
+          <h3>Your writing</h3>
+          <textarea id="studentWriting" class="writing-area" placeholder="Hi Anna,&#10;&#10;Thanks for your letter..."></textarea>
+          <div class="writing-meta">
+            <span id="wordCount" class="word-count short">0 words · minimum 120</span>
+            <button class="btn btn-secondary" id="clearWriting">Clear writing</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Interactive education-vocabulary practice · Progress is saved automatically in your browser.
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const TOTAL_ITEMS = 60;
+    const STORAGE_KEY = "education-vocab-practice-v1";
+    let selectedChip = null;
+
+    const normalize = (value) =>
+      value
+        .toLowerCase()
+        .trim()
+        .replace(/[’‘]/g, "'")
+        .replace(/\s+/g, " ")
+        .replace(/[.,!?;:]+$/g, "");
+
+    const acceptedAnswers = (element) =>
+      (element.dataset.answer || "")
+        .split("|")
+        .map(normalize);
+
+    function isCorrect(element) {
+      if (element.type === "radio") {
+        const checked = document.querySelector(`input[name="${element.name}"]:checked`);
+        if (!checked) return false;
+        const correctRadio = document.querySelector(`input[name="${element.name}"][data-answer]`);
+        return normalize(checked.value) === normalize(correctRadio.value);
+      }
+      return acceptedAnswers(element).includes(normalize(element.value));
+    }
+
+    function getSectionItems(key) {
+      const section = document.querySelector(`[data-section="${key}"]`);
+      const radios = [...section.querySelectorAll('input[type="radio"][data-answer]')];
+      const gaps = [...section.querySelectorAll('.gap-input[data-answer]')];
+      return [...radios, ...gaps];
+    }
+
+    function getAllAnswerables() {
+      const correctRadios = [...document.querySelectorAll('input[type="radio"][data-answer]')];
+      const gaps = [...document.querySelectorAll('.gap-input[data-answer]')];
+      return [...correctRadios, ...gaps];
+    }
+
+    function answeredCount() {
+      let count = 0;
+      getAllAnswerables().forEach(item => {
+        if (item.type === "radio") {
+          if (document.querySelector(`input[name="${item.name}"]:checked`)) count++;
+        } else if (item.value.trim()) {
+          count++;
+        }
+      });
+      return count;
+    }
+
+    function currentScore() {
+      return getAllAnswerables().reduce((sum, item) => sum + (isCorrect(item) ? 1 : 0), 0);
+    }
+
+    function sectionScore(key) {
+      return getSectionItems(key).reduce((sum, item) => sum + (isCorrect(item) ? 1 : 0), 0);
+    }
+
+    function updateDashboard() {
+      const answered = answeredCount();
+      const score = currentScore();
+      document.getElementById("progressText").textContent = `${answered} of ${TOTAL_ITEMS} answered`;
+      document.getElementById("progressFill").style.width = `${(answered / TOTAL_ITEMS) * 100}%`;
+      document.getElementById("overallScore").textContent = `${score} / ${TOTAL_ITEMS}`;
+
+      ["A", "B", "C", "D", "E"].forEach(key => {
+        const total = getSectionItems(key).length;
+        document.getElementById(`score-${key}`).textContent = `${sectionScore(key)} / ${total}`;
+      });
+    }
+
+    function checkSection(key) {
+      const section = document.querySelector(`[data-section="${key}"]`);
+      const items = getSectionItems(key);
+      let unanswered = 0;
+
+      items.forEach(item => {
+        if (item.type === "radio") {
+          const question = item.closest(".question");
+          const checked = document.querySelector(`input[name="${item.name}"]:checked`);
+          question.classList.remove("correct", "incorrect");
+          if (!checked) {
+            unanswered++;
+          } else {
+            question.classList.add(isCorrect(item) ? "correct" : "incorrect");
+          }
+        } else {
+          item.classList.remove("correct", "incorrect");
+          if (!item.value.trim()) {
+            unanswered++;
+          } else {
+            item.classList.add(isCorrect(item) ? "correct" : "incorrect");
+          }
+        }
+      });
+
+      const score = sectionScore(key);
+      const feedback = document.getElementById(`feedback-${key}`);
+      feedback.className = `feedback show ${score === items.length ? "success" : "warn"}`;
+      feedback.textContent =
+        score === items.length
+          ? `Excellent! You scored ${score}/${items.length}.`
+          : `You scored ${score}/${items.length}. ${unanswered ? `${unanswered} item(s) are still unanswered.` : "Review the highlighted answers and try again."}`;
+
+      updateDashboard();
+      saveState();
+      showToast(`Section ${key}: ${score}/${items.length}`);
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function revealSection(key) {
+      const section = document.querySelector(`[data-section="${key}"]`);
+      section.querySelectorAll(".gap-input[data-answer]").forEach(input => {
+        input.value = input.dataset.answer.split("|")[0];
+        input.classList.remove("incorrect");
+        input.classList.add("correct");
+      });
+
+      section.querySelectorAll('input[type="radio"][data-answer]').forEach(correctRadio => {
+        correctRadio.checked = true;
+        const question = correctRadio.closest(".question");
+        question.classList.remove("incorrect");
+        question.classList.add("correct");
+      });
+
+      updateDashboard();
+      saveState();
+      showToast(`Answers revealed for Section ${key}.`);
+    }
+
+    function resetSection(key) {
+      const section = document.querySelector(`[data-section="${key}"]`);
+      section.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+      section.querySelectorAll(".gap-input").forEach(input => {
+        input.value = "";
+        input.classList.remove("correct", "incorrect");
+      });
+      section.querySelectorAll(".question").forEach(q => q.classList.remove("correct", "incorrect"));
+
+      const feedback = document.getElementById(`feedback-${key}`);
+      feedback.className = "feedback";
+      feedback.textContent = "";
+
+      updateDashboard();
+      saveState();
+      showToast(`Section ${key} reset.`);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function saveState() {
+      const state = {
+        radios: {},
+        gaps: [],
+        writing: document.getElementById("studentWriting").value
+      };
+
+      document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+        state.radios[input.name] = input.value;
+      });
+
+      document.querySelectorAll(".gap-input").forEach((input, index) => {
+        state.gaps[index] = input.value;
+      });
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        Object.entries(state.radios || {}).forEach(([name, value]) => {
+          const selector = `input[name="${CSS.escape(name)}"][value="${CSS.escape(value)}"]`;
+          const radio = document.querySelector(selector);
+          if (radio) radio.checked = true;
+        });
+
+        document.querySelectorAll(".gap-input").forEach((input, index) => {
+          input.value = state.gaps?.[index] || "";
+        });
+
+        document.getElementById("studentWriting").value = state.writing || "";
+      } catch (error) {
+        console.warn("Could not load saved practice state.", error);
+      }
+    }
+
+    function updateWordCount() {
+      const text = document.getElementById("studentWriting").value.trim();
+      const count = text ? text.split(/\s+/).length : 0;
+      const counter = document.getElementById("wordCount");
+      counter.textContent = `${count} word${count === 1 ? "" : "s"} · minimum 120`;
+      counter.classList.toggle("good", count >= 120);
+      counter.classList.toggle("short", count < 120);
+    }
+
+    document.querySelectorAll(".check-section").forEach(button => {
+      button.addEventListener("click", () => checkSection(button.dataset.sectionKey));
+    });
+
+    document.querySelectorAll(".reveal-section").forEach(button => {
+      button.addEventListener("click", () => revealSection(button.dataset.sectionKey));
+    });
+
+    document.querySelectorAll(".reset-section").forEach(button => {
+      button.addEventListener("click", () => resetSection(button.dataset.sectionKey));
+    });
+
+    document.querySelectorAll(".word-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        selectedChip = chip.textContent.trim();
+        const group = chip.closest(".exercise-group");
+        const active = group.querySelector(".gap-input:focus");
+        if (active) {
+          active.value = selectedChip;
+          active.dispatchEvent(new Event("input", { bubbles: true }));
+          selectedChip = null;
+        } else {
+          showToast(`Selected “${selectedChip}”. Now click a gap.`);
+        }
+      });
+    });
+
+    document.querySelectorAll(".gap-input").forEach(input => {
+      input.addEventListener("focus", () => {
+        if (selectedChip) {
+          input.value = selectedChip;
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          selectedChip = null;
+        }
+      });
+
+      input.addEventListener("input", () => {
+        input.classList.remove("correct", "incorrect");
+        updateDashboard();
+        saveState();
+      });
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener("change", () => {
+        input.closest(".question").classList.remove("correct", "incorrect");
+        updateDashboard();
+        saveState();
+      });
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.target).scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    const writing = document.getElementById("studentWriting");
+    writing.addEventListener("input", () => {
+      updateWordCount();
+      saveState();
+    });
+
+    document.getElementById("clearWriting").addEventListener("click", () => {
+      writing.value = "";
+      updateWordCount();
+      saveState();
+      showToast("Writing area cleared.");
+    });
+
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          document.querySelectorAll(".nav-btn").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.target === id);
+          });
+        }
+      });
+    }, { rootMargin: "-35% 0px -55% 0px", threshold: 0 });
+
+    document.querySelectorAll(".section-card").forEach(section => sectionObserver.observe(section));
+
+    loadState();
+    updateWordCount();
+    updateDashboard();
+  </script>
+</body>
+</html>
